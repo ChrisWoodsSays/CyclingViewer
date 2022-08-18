@@ -36,17 +36,18 @@
 
     onMount(() => {
         //leafletMap.getMap().fitBounds([[1.266835, 103.796403], [1.232988, 103.854861]]);
-        leafletMap.getMap().fitBounds([[-2.3501,52.3483], [-0.8312,53.1582]]);
+        // leafletMap.getMap().fitBounds([[-2.3501,52.3483], [-0.8312,53.1582]]);
     });
 
 </script>
 
 <div width="900" height="380">
     <div class="rideMap" style="width: 100%; height: 100%;">
-        <LeafletMap bind:this={leafletMap} options={mapOptions}>
+        leaflet
+        <!-- <LeafletMap bind:this={leafletMap} options={mapOptions}>
             <TileLayer url={tileUrl} options={tileLayerOptions}/>
             <GeoJSON url="example.geojson" options={geoJsonOptions}/>
-        </LeafletMap>
+        </LeafletMap> -->
     </div>
 </div>
 

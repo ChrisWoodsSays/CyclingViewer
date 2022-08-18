@@ -60,7 +60,7 @@
       // Perceived Exertion
 	  };
 	}).then((d) => {
-		activities = d;//d.filter((dd) => dd.year >= 1920);
+		activities = d.splice(0,10);//d.filter((dd) => dd.year >= 1920);
 	});
 
 </script>
@@ -104,7 +104,7 @@
             </div>
           </div>
     
-          <!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas> -->
+          <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
           <Map />
     
           <h2>Ride Profile</h2>
