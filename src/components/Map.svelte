@@ -12,19 +12,24 @@
     export let backgroundColor = '#000000';
 
     //const width = 900, height = 600;
-    let width = 0 , height = 0;
+    let width = 0 , height = 500;
     const margin = { top: 15, bottom: 50, left: 50, right: 20 };
 
-    const innerHeight = height - margin.top - margin.bottom,
+    let innerHeight , innerWidth
+    $: innerHeight = height - margin.top - margin.bottom,
         innerWidth = width - margin.left - margin.right;
 
     $: xScale = scaleLinear()
         .domain(extent(activities, (d)  =>  d.distance))
-        .range([0, width]); 
+        .range([0, innerWidth]); 
 
     $: yScale = scaleLinear()
         .domain(extent(activities, (d)  =>  d.elevationGain))
-        .range([height, 0]);
+        .range([innerHeight, 0]);
+
+    // $: console.log(height)
+    // $: console.log(width)
+    $: height = width * 2/3
 
 
 </script>
@@ -32,9 +37,12 @@
 <div
     class="xxx"
     bind:clientWidth={width}
-    bind:clientHeight={height}
+
 >
-    <svg >
+    <svg
+        width={width}
+        height={height}
+    >
         <g transform={`translate(${margin.left},${margin.top})`}>
         <!-- <Axis {innerHeight} {margin} scale={xScale} position="bottom" />
         <Axis {innerHeight} {margin} scale={yScale} position="left" /> -->
@@ -56,6 +64,7 @@
               <!-- fill={`${colorScale(data.class)}`} -->
 
 <style>
+    
 </style>
 
 
