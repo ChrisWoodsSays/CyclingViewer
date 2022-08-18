@@ -1,7 +1,9 @@
 <script>
     // Create map of activities
     import {onMount} from "svelte";
-    // import {GeoJSON, LeafletMap, TileLayer} from 'svelte-leafletjs';
+
+    import { extent, scaleLinear, scaleOrdinal } from "d3";
+    
     // import { fade } from 'svelte/transition';
     import { tooltipable } from '../actions/tooltipable';
 
@@ -9,47 +11,53 @@
     export let foregroundColor = '#FFFFFF';
     export let backgroundColor = '#000000';
 
-    let tooltipTarget;
+    //const width = 900, height = 600;
+    let width = 0 , height = 0;
+    const margin = { top: 15, bottom: 50, left: 50, right: 20 };
 
-    const mapOptions = {
-        center: [1.250111, 103.830933],
-        zoom: 13,
-    };
-    const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-    const tileLayerOptions = {
-        minZoom: 0,
-        maxZoom: 20,
-        maxNativeZoom: 19,
-        attribution: "© OpenStreetMap contributors",
-    };
-    const geoJsonOptions = {
-        style: function (geoJsonFeature) {
-            console.log('style', geoJsonFeature);
-            return {};
-        },
-        onEachFeature: function (feature, layer) {
-            console.log('onEachFeature', feature, layer);
-        },
-    };
+    const innerHeight = height - margin.top - margin.bottom,
+        innerWidth = width - margin.left - margin.right;
 
-    let leafletMap;
+    $: xScale = scaleLinear()
+        .domain(extent(activities, (d)  =>  d.distance))
+        .range([0, width]); 
 
-    onMount(() => {
-        //leafletMap.getMap().fitBounds([[1.266835, 103.796403], [1.232988, 103.854861]]);
-        // leafletMap.getMap().fitBounds([[-2.3501,52.3483], [-0.8312,53.1582]]);
-    });
+    $: yScale = scaleLinear()
+        .domain(extent(activities, (d)  =>  d.elevationGain))
+        .range([height, 0]);
+
 
 </script>
 
-<div width="900" height="380">
-    <div class="rideMap" style="width: 100%; height: 100%;">
-        leaflet
-        <!-- <LeafletMap bind:this={leafletMap} options={mapOptions}>
-            <TileLayer url={tileUrl} options={tileLayerOptions}/>
-            <GeoJSON url="example.geojson" options={geoJsonOptions}/>
-        </LeafletMap> -->
-    </div>
+<div
+    class="xxx"
+    bind:clientWidth={width}
+    bind:clientHeight={height}
+>
+    <svg >
+        <g transform={`translate(${margin.left},${margin.top})`}>
+        <!-- <Axis {innerHeight} {margin} scale={xScale} position="bottom" />
+        <Axis {innerHeight} {margin} scale={yScale} position="left" /> -->
+        <text transform={`translate(${-30},${innerHeight / 2}) rotate(-90)`}
+            >Elevation</text>
+        {#each activities as data, i}
+
+            <circle
+                cx={xScale(data.distance)}
+                cy={yScale(data.elevationGain)}
+                r="5"
+                fill = "red"
+            />
+        {/each}
+        <text x={innerWidth / 2} y={innerHeight + 35}>Distance</text>
+        </g>
+    </svg>
 </div>
+              <!-- fill={`${colorScale(data.class)}`} -->
 
 <style>
 </style>
+
+
+
+

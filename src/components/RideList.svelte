@@ -15,14 +15,16 @@
 <div class="activities">
   <!-- use:css={{foregroundColor, backgroundColor}}
   bind:this={tooltipTarget} -->
-    {#each activities as act}
-      <li class="nav-item">
-        <!-- <a class="nav-link" href="#">
-          <span data-feather="file" class="align-text-bottom"></span>
-        </a> -->
-        {act.name}
-      </li>
-    {/each}
+    <ul class="nav flex-column">
+      {#each activities as act}
+        <li class="nav-item nav-link">
+          <!-- <a class="nav-link" href="#">
+            <span data-feather="file" class="align-text-bottom"></span>
+          </a> -->
+          {act.name}
+        </li>
+      {/each}
+    </ul>
   </div>
 
   <!-- use:tooltipable = {{
