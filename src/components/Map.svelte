@@ -2,12 +2,13 @@
     // Create map of activities
     import {onMount} from "svelte";
 
-    import { extent, scaleLinear, scaleOrdinal } from "d3";
+    import { extent, scaleLinear, scaleOrdinal, schemeCategory10 } from "d3";
     
     // import { fade } from 'svelte/transition';
     import { tooltipable } from '../actions/tooltipable';
 
     export let activities = [];
+    export let clusters = [];
     export let foregroundColor = '#FFFFFF';
     export let backgroundColor = '#000000';
 
@@ -27,6 +28,10 @@
         .domain(extent(activities, (d)  =>  d.elevationGain))
         .range([innerHeight, 0]);
 
+    $: scaleClusterColour = scaleOrdinal()
+        .domain(clusters)
+        .range(schemeCategory10);
+
     // $: console.log(height)
     // $: console.log(width)
     $: height = width * 2/3
@@ -37,7 +42,6 @@
 <div
     class="xxx"
     bind:clientWidth={width}
-
 >
     <svg
         width={width}
@@ -49,12 +53,12 @@
         <text transform={`translate(${-30},${innerHeight / 2}) rotate(-90)`}
             >Elevation</text>
         {#each activities as data, i}
-
             <circle
                 cx={xScale(data.distance)}
                 cy={yScale(data.elevationGain)}
-                r="5"
-                fill = "red"
+                r="10"
+                opacity=0.6
+                fill = {scaleClusterColour(data.cluster)}
             />
         {/each}
         <text x={innerWidth / 2} y={innerHeight + 35}>Distance</text>

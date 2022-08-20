@@ -3,7 +3,7 @@
   // import Counter from './lib/Counter.svelte'
   import Title from './components/Title.svelte'
   import Credits from './components/Credits.svelte'
-  import RideList from './components/RideList.svelte'
+  import ClusterList from './components/ClusterList.svelte'
   import Map from './components/Map.svelte'
   import RouteProfile from './components/Credits.svelte'
 
@@ -13,55 +13,70 @@
   
 	let activities = [];
   
-	csv('./data/activities.csv', (act) => {
+	csv('./data/activitiesClustered.csv', (act) => {
 	  return {
-      id: act['Activity ID'],
-      actvityDate: act['Activity Date'],
-      name: act['Activity Name'],
-      type: act['Activity Type'],
-      description: act['Activity Description'],
-      //elapsedTime: act['Elapsed Time,  DUPLICETE FIELD
-      // distance: act['Distance,,  DUPLICETE FIELD
-      //: act['Max Heart Rate,
-      //: act['Relative Effort,
-      //: act['Commute,
-      gear: act['Activity Gear'],
-      filename: act['Filename'],
-      // Athlete Weight
-      // Bike Weight,
-      elapsedTime: act['Elapsed Time'],
-      movingTime: act['Moving Time'],
-      distance: +act['Distance'],
-      maxSpeed: act['Max Speed'],
-      averageSpeed: act['Average Speed'],
-      elevationGain: +act['Elevation Gain'],
-      elevationLoss: act['Elevation Loss'],
-      elevationLow: act['Elevation Low'],
-      elevationHigh: act['Elevation High'],
-      maxGrade: act['Max Grade'],
-      // Average Grade,
-      // Average Positive Grade,
-      // Average Negative Grade,
-      // Max Cadence,
-      // Average Cadence,
-      // Max Heart Rate,
-      // Average Heart Rate,
-      // Max Watts,
-      averageWatts: act['Average Watts'],
-      calories: act['Calories']
-      // Max Temperature,
-      // Average Temperature,
-      // Relative Effort,
-      // Total Work,
-      // Number of Runs,
-      // Uphill Time,
-      // Downhill Time,
-      // Other Time,
-      // Perceived Exertion
+      id: act['id'],
+      actvityDate: act['activity_date'],
+      name: act['activity_name'],
+      elapsedTime: act['elapsed_time'],
+      movingTime: act['moving_time'],
+      distance: +act['distance'],
+      elevationGain: +act['elevation_gain'],
+      elevationLow: act['elevation_low'],
+      elevationHigh: act['elevation_high'],
+      cluster: +act['cluster'],
+
+      // id: act['Activity ID'],
+      // actvityDate: act['Activity Date'],
+      // name: act['Activity Name'],
+      // type: act['Activity Type'],
+      // description: act['Activity Description'],
+      // //elapsedTime: act['Elapsed Time,  DUPLICETE FIELD
+      // // distance: act['Distance,,  DUPLICETE FIELD
+      // //: act['Max Heart Rate,
+      // //: act['Relative Effort,
+      // //: act['Commute,
+      // gear: act['Activity Gear'],
+      // filename: act['Filename'],
+      // // Athlete Weight
+      // // Bike Weight,
+      // elapsedTime: act['Elapsed Time'],
+      // movingTime: act['Moving Time'],
+      // distance: +act['Distance'],
+      // maxSpeed: act['Max Speed'],
+      // averageSpeed: act['Average Speed'],
+      // elevationGain: +act['Elevation Gain'],
+      // elevationLoss: act['Elevation Loss'],
+      // elevationLow: act['Elevation Low'],
+      // elevationHigh: act['Elevation High'],
+      // maxGrade: act['Max Grade'],
+      // // Average Grade,
+      // // Average Positive Grade,
+      // // Average Negative Grade,
+      // // Max Cadence,
+      // // Average Cadence,
+      // // Max Heart Rate,
+      // // Average Heart Rate,
+      // // Max Watts,
+      // averageWatts: act['Average Watts'],
+      // calories: act['Calories']
+      // // Max Temperature,
+      // // Average Temperature,
+      // // Relative Effort,
+      // // Total Work,
+      // // Number of Runs,
+      // // Uphill Time,
+      // // Downhill Time,
+      // // Other Time,
+      // // Perceived Exertion
 	  };
 	}).then((d) => {
 		activities = d;//.splice(0,10);//d.filter((dd) => dd.year >= 1920);
 	});
+
+  let clusters
+  $: clusters = Array.from(new Set(activities.map(act => act.cluster)))
+    .sort(function(a, b){return a - b}); // compare required as need numeric sort
 
 </script>
 <!-- https://getbootstrap.com/docs/5.2/examples/dashboard/ -->
@@ -85,7 +100,8 @@
         <div class="row">
           <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-3 sidebar-sticky">
-              <RideList activities = {activities}/>
+              <ClusterList activities = {activities}
+              clusters = {clusters}/>
             </div>
           </nav>
       
@@ -94,8 +110,8 @@
               <h1 class="h2">Map</h1>
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group me-2">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Distance & Climb</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Map</button>
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                   <span data-feather="calendar" class="align-text-bottom"></span>
@@ -104,7 +120,8 @@
               </div>
             </div>
       
-            <Map activities = {activities}/>
+            <Map activities = {activities}
+                  clusters = {clusters}/>
       
             <h2>Ride Profile</h2>
             <div>
