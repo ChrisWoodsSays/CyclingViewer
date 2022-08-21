@@ -11,8 +11,21 @@
 	// import { everyOccurenceDataStore } from './stores.js';
 	const parseDate = timeParse('%Y-%m-%d');
   
-	let activities = [];
+
+  let locations = [];
+
+  csv('./data/locations.csv', (act) => {
+	  return {
+      location: act['location'],
+      latitude: +act['latitude'],
+      longitude: +act['longitude'],
+      perimeterRadius: act['perimeterRadius'],
+	  };
+	}).then((d) => {
+		locations = d;
+	});
   
+  let activities = [];
 	csv('./data/activitiesClustered.csv', (act) => {
 	  return {
       id: act['id'],
@@ -24,59 +37,18 @@
       elevationGain: +act['elevation_gain'],
       elevationLow: act['elevation_low'],
       elevationHigh: act['elevation_high'],
-      cluster: +act['cluster'],
-
-      // id: act['Activity ID'],
-      // actvityDate: act['Activity Date'],
-      // name: act['Activity Name'],
-      // type: act['Activity Type'],
-      // description: act['Activity Description'],
-      // //elapsedTime: act['Elapsed Time,  DUPLICETE FIELD
-      // // distance: act['Distance,,  DUPLICETE FIELD
-      // //: act['Max Heart Rate,
-      // //: act['Relative Effort,
-      // //: act['Commute,
-      // gear: act['Activity Gear'],
-      // filename: act['Filename'],
-      // // Athlete Weight
-      // // Bike Weight,
-      // elapsedTime: act['Elapsed Time'],
-      // movingTime: act['Moving Time'],
-      // distance: +act['Distance'],
-      // maxSpeed: act['Max Speed'],
-      // averageSpeed: act['Average Speed'],
-      // elevationGain: +act['Elevation Gain'],
-      // elevationLoss: act['Elevation Loss'],
-      // elevationLow: act['Elevation Low'],
-      // elevationHigh: act['Elevation High'],
-      // maxGrade: act['Max Grade'],
-      // // Average Grade,
-      // // Average Positive Grade,
-      // // Average Negative Grade,
-      // // Max Cadence,
-      // // Average Cadence,
-      // // Max Heart Rate,
-      // // Average Heart Rate,
-      // // Max Watts,
-      // averageWatts: act['Average Watts'],
-      // calories: act['Calories']
-      // // Max Temperature,
-      // // Average Temperature,
-      // // Relative Effort,
-      // // Total Work,
-      // // Number of Runs,
-      // // Uphill Time,
-      // // Downhill Time,
-      // // Other Time,
-      // // Perceived Exertion
+      cluster: +act['cluster']
 	  };
 	}).then((d) => {
 		activities = d;//.splice(0,10);//d.filter((dd) => dd.year >= 1920);
 	});
 
-  let clusters
+  let clusters = []
   $: clusters = Array.from(new Set(activities.map(act => act.cluster)))
     .sort(function(a, b){return a - b}); // compare required as need numeric sort
+
+
+  
 
 </script>
 <!-- https://getbootstrap.com/docs/5.2/examples/dashboard/ -->
