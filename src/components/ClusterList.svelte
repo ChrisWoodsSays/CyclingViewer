@@ -10,7 +10,6 @@
   export let backgroundColor = '#000000';
 
   let tooltipTarget;
-  $: console.log(activities)
 
 
 </script>

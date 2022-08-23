@@ -26,18 +26,40 @@
 	});
   
   let activities = [];
-	csv('./data/activitiesClustered.csv', (act) => {
+	//csv('./data/activitiesClustered.csv', (act) => {
+  csv('./data/activitiesStrava.csv', (act) => {
 	  return {
       id: act['id'],
-      actvityDate: act['activity_date'],
-      name: act['activity_name'],
+      actvityDate: act['start_date'],
+      name: act['name'],
       elapsedTime: act['elapsed_time'],
       movingTime: act['moving_time'],
       distance: +act['distance'],
-      elevationGain: +act['elevation_gain'],
-      elevationLow: act['elevation_low'],
-      elevationHigh: act['elevation_high'],
-      cluster: +act['cluster']
+      elevationGain: +act['total_elevation_gain'],
+      elevationLow: act['elev_low'],
+      elevationHigh: act['elev_high'],
+
+      achievement_count: +act['achievement_count'],
+      average_speed: +act['average_speed'],
+      average_temp: +act['average_temp'],
+      average_watts: +act['average_watts'],
+      device_watts: +act['device_watts'],
+      gear_id: +act['gear_id'],
+      kilojoules: +act['kilojoules'],
+      kudos_count: +act['kudos_count'],
+      location_country: +act['location_country'],
+      manual: +act['manual'],
+      max_speed: +act['max_speed'],
+      pr_count: +act['pr_count'],
+      sport_type: +act['sport_type'],
+      start_date: +act['start_date'],
+      start_date_local: +act['start_date_local'],
+      start_lat: +act['start_latlng1'],
+      start_lon: +act['start_latlng2'],
+      end_lat: +act['end_latlng1'],
+      end_lon: +act['end_latlng2'],
+      timezone: +act['timezone'],
+      //cluster: +act['cluster']
 	  };
 	}).then((d) => {
 		activities = d;//.splice(0,10);//d.filter((dd) => dd.year >= 1920);
@@ -47,7 +69,17 @@
   $: clusters = Array.from(new Set(activities.map(act => act.cluster)))
     .sort(function(a, b){return a - b}); // compare required as need numeric sort
 
-
+  let activityRoutes = [];
+	csv('./data/activityRoutes.csv', (act) => {
+	  return {
+      id: act['id'],
+      elevation: act['ele'],
+      latitude: act['lat'],
+      longitude: act['lon']
+	  };
+	}).then((d) => {
+		activityRoutes = d;//.splice(0,10);//d.filter((dd) => dd.year >= 1920);
+	});
   
 
 </script>

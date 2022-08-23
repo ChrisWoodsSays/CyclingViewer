@@ -1,7 +1,7 @@
 import { count, dragEnable } from 'd3';
 import Tooltip from '../components/Tooltip.svelte';
 
-export function tooltipable(node, { data, target = document.body, foregroundColor, backgroundColor, everyOccurence }) {
+export function tooltipable(node, { data, target = document.body, foregroundColor, backgroundColor }) {
   let component;
 
   function handleMouseleave(e) {
@@ -13,23 +13,20 @@ export function tooltipable(node, { data, target = document.body, foregroundColo
     const { pageX: x, pageY: y } = e;
     const { clientWidth: targetWidth, clientHeight: targetHeight } = target;
 
+    console.log(x,y);
+
     //let occurencesForThisWord = everyOccurenceDataStore[].filter(occurence => occurence.word == data.displayWord);
     //console.log($everyOccurenceDataStore);
 
     component = new Tooltip({
       target,
       props: {
-        word: data.word,
-        displayWord: data.displayWord,
-        title: data.title,
-        group: data.group,
-        year: data.year,
-        peakYear: data.peakYear,
-        count: data.count,
-        allTimeCount: data.allTimeCount,
-        periodCountRank: data.periodCountRank,
-        wikiLink: data.wikiLink,
-        imageURL: data.imageURL,
+        actvityDate: data.actvityDate,
+        name: data.name,
+        moving_time: data.movingTime,
+        distance: data.distance,
+        elevationGain: data.elevationGain,
+        average_speed: data.average_speed,
         x, 
         y: y + 15,
         foregroundColor,
@@ -51,6 +48,7 @@ export function tooltipable(node, { data, target = document.body, foregroundColo
     },
     update(data) {
       target = data.target;
+      console.log("hello")
     },
   };
 };

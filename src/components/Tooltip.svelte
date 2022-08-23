@@ -5,19 +5,14 @@
   import WordLineChart from './WordLineChart.svelte';
   import { everyOccurenceDataStore } from '../stores.js';
 
-  export let word = 'word Key';
-  export let displayWord = 'Display Word';
-  export let title = 'Title';
-  export let year = 'Year';
-  export let group = 'Group';
-  export let count = 'Count';
-  export let allTimeCount = 'All Time Count';
-  export let peakYear = 'Peak Year';
-  export let periodCountRank = 'CountRank';
-  export let allTimeRank = 'CountRank';
- 
-  export let wikiLink = '';
-  export let imageURL = '';
+
+  export let actvityDate = 'Display Word';
+  export let name = 'Activity Name';
+  export let moving_time;
+  export let distance;
+  export let elevationGain;
+  export let average_speed;
+
   export let x = 0;
   export let y = 0;
   export let foregroundColor = '#FFFFFF';
@@ -38,18 +33,22 @@
   $: leftPos = `${Math.max(margin.left + width / 2, Math.min(x, targetWidth - width / 2 - margin.right))}px`;
   //$: topPos = `${Math.max(margin.top, Math.min(y, targetHeight - height - margin.bottom))}px`;
   $: topPos = `${y + height > targetHeight - margin.bottom ? y - height - 25: y}px`;
-  
-  function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 
-let occurences
-  const filt=(word)=>{
-  //const filt(word) {
-    occurences = $everyOccurenceDataStore.filter(occurence => occurence.word != "poles");
-    //console.log("mycounts: ",mycounts)
-    //return occurences;
-  }
+  // console.log(name)
+  // $: console.log(leftPos, topPos)
+  // $: console.log(targetHeight, targetWidth)
+  
+  // function numberWithCommas(x) {
+  //   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // }
+
+  // let occurences
+  // const filt=(word)=>{
+  // //const filt(word) {
+  //   occurences = $everyOccurenceDataStore.filter(occurence => occurence.word != "poles");
+  //   //console.log("mycounts: ",mycounts)
+  //   //return occurences;
+  // }
 
   //console.log($everyOccurenceDataStore)
 </script>
@@ -65,28 +64,28 @@ let occurences
     bind:clientHeight={height}
   >
     <h2>
-      {displayWord}, {year}
+      {name}, {actvityDate}
     </h2>
     <p>
-      {title}
+      <!-- {title} -->
     </p>
     <p>
-      [{group}]
+      <!-- [{group}] -->
     </p>
     <p>
-      {numberWithCommas(count)} mentions ({ordinal_suffix(periodCountRank)})
+      Distance {distance}, Elevation: {elevationGain}
     </p>
     <p>
-      {numberWithCommas(allTimeCount)} mentions in total, peaking in {peakYear} 
+      Moving Time: {moving_time}, Average Speed: {average_speed}
     </p>
 <!--     {#if imageURL !== "NA"}
       <img src = {imageURL} alt = "xxx">
     {/if} -->
-    <WordLineChart
+    <!-- <WordLineChart
       
       everyOccurenceData={$everyOccurenceDataStore.filter(occurence => occurence.word == word)}
 
-    />
+    /> -->
   </div>
 </div>
 

@@ -12,6 +12,8 @@
     export let foregroundColor = '#FFFFFF';
     export let backgroundColor = '#000000';
 
+    let tooltipTarget;
+
     //const width = 900, height = 600;
     let width = 0 , height = 500;
     const margin = { top: 15, bottom: 50, left: 50, right: 20 };
@@ -36,6 +38,8 @@
     // $: console.log(width)
     $: height = width * 2/3
 
+    $: console.log(activities)
+
 
 </script>
 
@@ -48,20 +52,30 @@
         height={height}
     >
         <g transform={`translate(${margin.left},${margin.top})`}>
-        <!-- <Axis {innerHeight} {margin} scale={xScale} position="bottom" />
-        <Axis {innerHeight} {margin} scale={yScale} position="left" /> -->
-        <text transform={`translate(${-30},${innerHeight / 2}) rotate(-90)`}
-            >Elevation</text>
-        {#each activities as data, i}
-            <circle
-                cx={xScale(data.distance)}
-                cy={yScale(data.elevationGain)}
-                r="10"
-                opacity=0.6
-                fill = {scaleClusterColour(data.cluster)}
-            />
-        {/each}
-        <text x={innerWidth / 2} y={innerHeight + 35}>Distance</text>
+
+            <!-- <Axis {innerHeight} {margin} scale={xScale} position="bottom" />
+            <Axis {innerHeight} {margin} scale={yScale} position="left" /> -->
+            <text transform={`translate(${-30},${innerHeight / 2}) rotate(-90)`}
+                    >Elevation</text>
+            <g class="circles">
+                use:css={{foregroundColor, backgroundColor}}
+                bind:this={tooltipTarget}
+                {#each activities as data, i}
+                    <circle
+                        use:tooltipable={{data,
+                            target: tooltipTarget,
+                            foregroundColor: foregroundColor,
+                            backgroundColor: backgroundColor
+                        }}
+                        cx={xScale(data.distance)}
+                        cy={yScale(data.elevationGain)}
+                        r="10"
+                        opacity=0.6
+                        fill = {scaleClusterColour(data.cluster)}
+                    />
+                {/each}
+            </g>
+            <text x={innerWidth / 2} y={innerHeight + 35}>Distance</text>
         </g>
     </svg>
 </div>
