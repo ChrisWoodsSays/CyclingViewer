@@ -1,17 +1,15 @@
 <script lang="ts">
-  // import svelteLogo from './assets/svelte.svg'
-  // import Counter from './lib/Counter.svelte'
   import Title from './components/Title.svelte'
   import Credits from './components/Credits.svelte'
   import ClusterList from './components/ClusterList.svelte'
   import Map from './components/Map.svelte'
   import RouteProfile from './components/Credits.svelte'
+  import { background as backgroundColor, temperature as foregroundColor } from './utils/colors';
+  import { routeDataStore } from './stores.js';
 
   import { csv, timeParse } from 'd3';
-	// import { everyOccurenceDataStore } from './stores.js';
 	const parseDate = timeParse('%Y-%m-%d');
   
-
   let locations = [];
 
   csv('./data/locations.csv', (act) => {
@@ -26,7 +24,6 @@
 	});
   
   let activities = [];
-	//csv('./data/activitiesClustered.csv', (act) => {
   csv('./data/activitiesStrava.csv', (act) => {
 	  return {
       id: act['id'],
@@ -63,6 +60,7 @@
 	  };
 	}).then((d) => {
 		activities = d;//.splice(0,10);//d.filter((dd) => dd.year >= 1920);
+    console.log(activities)
 	});
 
   let clusters = []
@@ -73,12 +71,15 @@
 	csv('./data/activityRoutes.csv', (act) => {
 	  return {
       id: act['id'],
-      elevation: act['ele'],
-      latitude: act['lat'],
-      longitude: act['lon']
+      elevation: +act['ele'],
+      latitude: +act['lat'],
+      longitude: +act['lon'],
+      distance: +act['distance']
 	  };
 	}).then((d) => {
 		activityRoutes = d;//.splice(0,10);//d.filter((dd) => dd.year >= 1920);
+    routeDataStore.set(activityRoutes);
+    console.log(activityRoutes)
 	});
   
 
@@ -99,7 +100,6 @@
           </div>
         </div>
       </header>
-      
       <div class="container-fluid">
         <div class="row">
           <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
@@ -108,7 +108,6 @@
               clusters = {clusters}/>
             </div>
           </nav>
-      
           <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <h1 class="h2">Map</h1>
@@ -125,7 +124,9 @@
             </div>
       
             <Map activities = {activities}
-                  clusters = {clusters}/>
+                  clusters = {clusters}
+                  foregroundColor = {foregroundColor}
+                  backgroundColor = {backgroundColor}/>
       
             <h2>Ride Profile</h2>
             <div>

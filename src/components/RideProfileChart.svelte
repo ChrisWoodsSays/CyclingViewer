@@ -8,12 +8,12 @@
   // import { extent } from 'd3-array';
 	// import { scaleLinear } from 'd3-scale';
 	import { line, curveBasis } from 'd3-shape';
-  import { timeLineCoordinatesStore } from '../stores.js';
+  import { routeDataStore } from '../stores.js';
   import { css } from '../actions/css';
 
   // the props
   export let wordToChart = "Word To Chart";
-  export let everyOccurenceData = [];
+  export let routeData = [];
   export let foregroundColor = '#FFFFFF';
   export let backgroundColor = '#000000';
 
@@ -25,23 +25,23 @@
 
   // the scales
   const xScale = scaleLinear()
-		.domain(extent(everyOccurenceData.map(d => d.year)))
+		.domain(extent(routeData.map(d => d.distance)))
 		.range([0 , 100]);
   const yScale = scaleLinear()
-		.domain(extent(everyOccurenceData.map(d => d.count)))
+		.domain(extent(routeData.map(d => d.elevation)))
 		.range([100 , 0]);
 
   // the path generator
 	const pathLine = line()
-		.x(d => xScale(d.year))
-		.y(d => yScale(d.count))
+		.x(d => xScale(d.distance))
+		.y(d => yScale(d.elevation))
 		.curve(curveBasis);
 
 </script>
 
 <svg viewBox="0 0 100 100">
 		<path transition:draw={{duration: 1000}}
-					d={pathLine(everyOccurenceData)} />
+					d={pathLine(routeData)} />
 </svg>
 
 <style>

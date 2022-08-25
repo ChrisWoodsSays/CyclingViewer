@@ -1,4 +1,3 @@
-import { count, dragEnable } from 'd3';
 import Tooltip from '../components/Tooltip.svelte';
 
 export function tooltipable(node, { data, target = document.body, foregroundColor, backgroundColor }) {
@@ -13,14 +12,12 @@ export function tooltipable(node, { data, target = document.body, foregroundColo
     const { pageX: x, pageY: y } = e;
     const { clientWidth: targetWidth, clientHeight: targetHeight } = target;
 
-    console.log(x,y);
-
-    //let occurencesForThisWord = everyOccurenceDataStore[].filter(occurence => occurence.word == data.displayWord);
-    //console.log($everyOccurenceDataStore);
+    //console.log(x,y);
 
     component = new Tooltip({
       target,
       props: {
+        id: data.id,
         actvityDate: data.actvityDate,
         name: data.name,
         moving_time: data.movingTime,
@@ -48,7 +45,6 @@ export function tooltipable(node, { data, target = document.body, foregroundColo
     },
     update(data) {
       target = data.target;
-      console.log("hello")
     },
   };
 };

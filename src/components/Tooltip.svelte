@@ -1,11 +1,10 @@
 <script>
   import { fade } from 'svelte/transition';
   import { css } from '../actions/css';
-  import { ordinal_suffix } from '../utils/numberFormat';
-  import WordLineChart from './WordLineChart.svelte';
-  import { everyOccurenceDataStore } from '../stores.js';
+  import RideProfileChart from './RideProfileChart.svelte'
+  import { routeDataStore } from '../stores.js';
 
-
+  export let id;
   export let actvityDate = 'Display Word';
   export let name = 'Activity Name';
   export let moving_time;
@@ -31,35 +30,21 @@
   };
 
   $: leftPos = `${Math.max(margin.left + width / 2, Math.min(x, targetWidth - width / 2 - margin.right))}px`;
-  //$: topPos = `${Math.max(margin.top, Math.min(y, targetHeight - height - margin.bottom))}px`;
   $: topPos = `${y + height > targetHeight - margin.bottom ? y - height - 25: y}px`;
 
-  // console.log(name)
+  console.log(name)
   // $: console.log(leftPos, topPos)
   // $: console.log(targetHeight, targetWidth)
   
-  // function numberWithCommas(x) {
-  //   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  // }
-
-  // let occurences
-  // const filt=(word)=>{
-  // //const filt(word) {
-  //   occurences = $everyOccurenceDataStore.filter(occurence => occurence.word != "poles");
-  //   //console.log("mycounts: ",mycounts)
-  //   //return occurences;
-  // }
-
-  //console.log($everyOccurenceDataStore)
 </script>
 
 <div
-  class="tooltip"
+  class="ms-tooltip"
   use:css={{leftPos, topPos, foregroundColor, backgroundColor}}
   transition:fade={{duration: 200}}
 >
   <div
-    class="tooltip-content"
+    class="ms-tooltip-content"
     bind:clientWidth={width}
     bind:clientHeight={height}
   >
@@ -78,14 +63,8 @@
     <p>
       Moving Time: {moving_time}, Average Speed: {average_speed}
     </p>
-<!--     {#if imageURL !== "NA"}
-      <img src = {imageURL} alt = "xxx">
-    {/if} -->
-    <!-- <WordLineChart
-      
-      everyOccurenceData={$everyOccurenceDataStore.filter(occurence => occurence.word == word)}
-
-    /> -->
+    <RideProfileChart routeData={$routeDataStore.filter(route => route.id == id)}
+  />
   </div>
 </div>
 
@@ -101,14 +80,14 @@
     line-height: 50%;
   }
 
-  .tooltip {
+  .ms-tooltip {
     position: absolute;
     z-index: 100;
     left: var(--leftPos);
     top: var(--topPos);
   }
 
-  .tooltip-content {
+  .ms-tooltip-content {
     position: relative;
     left: -50%;
     max-width: 250px;
