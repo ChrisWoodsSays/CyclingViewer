@@ -1,4 +1,4 @@
-const color2 = '#006e46';
+const color2 = '#FC4C02';
 const color1 = '#FFFFFF';
 
 export const background = color2;

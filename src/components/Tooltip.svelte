@@ -32,6 +32,10 @@
   $: leftPos = `${Math.max(margin.left + width / 2, Math.min(x, targetWidth - width / 2 - margin.right))}px`;
   $: topPos = `${y + height > targetHeight - margin.bottom ? y - height - 25: y}px`;
 
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   console.log(name)
   // $: console.log(leftPos, topPos)
   // $: console.log(targetHeight, targetWidth)
@@ -49,16 +53,16 @@
     bind:clientHeight={height}
   >
     <h2>
-      {name}, {actvityDate}
+      {name}
     </h2>
     <p>
-      <!-- {title} -->
+      {actvityDate}
     </p>
     <p>
       <!-- [{group}] -->
     </p>
     <p>
-      Distance {distance}, Elevation: {elevationGain}
+      {Math.round(distance)} miles, {Math.round(elevationGain)} metre climb
     </p>
     <p>
       Moving Time: {moving_time}, Average Speed: {average_speed}
@@ -87,6 +91,7 @@
     top: var(--topPos);
   }
 
+  /* Note that ms prefix is required to avoid conflict between Matthias' and Bootstrap tooltips */
   .ms-tooltip-content {
     position: relative;
     left: -50%;
@@ -106,13 +111,13 @@
   }
 
   h2 {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: normal;
   }
 
   p {
     margin: 0.4rem 0 0 0;
     line-height: 1.3;
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 </style>

@@ -28,13 +28,23 @@
 		.domain(extent(routeData.map(d => d.distance)))
 		.range([0 , 100]);
   const yScale = scaleLinear()
-		.domain(extent(routeData.map(d => d.elevation)))
+		.domain(extent(routeData.map(d => d.elevationGain)))
 		.range([100 , 0]);
+
+  const lonScale = scaleLinear()
+		.domain(extent(routeData.map(d => d.longitude)))
+		.range([0 , 100]);
+  const latScale = scaleLinear()
+		.domain(extent(routeData.map(d => d.latitude)))
+		.range([100 ,  0]);
 
   // the path generator
 	const pathLine = line()
-		.x(d => xScale(d.distance))
-		.y(d => yScale(d.elevation))
+		// .x(d => xScale(d.distance))
+		// .y(d => yScale(d.elevation))
+
+		.x(d => lonScale(d.longitude))
+    .y(d => latScale(d.latitude))
 		.curve(curveBasis);
 
 </script>

@@ -24,10 +24,12 @@
 	});
   
   let activities = [];
-  csv('./data/activitiesStrava.csv', (act) => {
+  // csv('./data/activitiesStrava.csv', (act) => {
+  csv('./data/activitiesClustered.csv', (act) => {
 	  return {
       id: act['id'],
-      actvityDate: act['start_date'],
+      actvityDate: new Date(act['start_date']).toLocaleDateString(),
+      //actvityDate: act['start_date'],
       name: act['name'],
       elapsedTime: act['elapsed_time'],
       movingTime: act['moving_time'],
@@ -56,7 +58,7 @@
       end_lat: +act['end_latlng1'],
       end_lon: +act['end_latlng2'],
       timezone: +act['timezone'],
-      //cluster: +act['cluster']
+      cluster: +act['cluster']
 	  };
 	}).then((d) => {
 		activities = d;//.splice(0,10);//d.filter((dd) => dd.year >= 1920);

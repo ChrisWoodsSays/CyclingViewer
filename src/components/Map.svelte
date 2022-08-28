@@ -46,43 +46,43 @@
     $: height = width * 2/3
     $: console.log(activities)
 
-//     var simulation = d3.forceSimulation(activities)
-//         //.force('charge', d3.forceManyBody().strength(5))
-//         .force('x', d3.forceX().x(function(d) {
-//             return xScale(d.distance);
-//         }))
-//         .force('y', d3.forceY().y(function(d) {
-//             return yScale(d.elevationGain);
-//         }))
-//         .force('collision', d3.forceCollide().radius(function(d) {
-//             return radiusCountScale(d.elevationGain*0.7);
-//         }))
-//         .on('tick', ticked);
+    // var simulation = d3.forceSimulation(activities)
+    //     //.force('charge', d3.forceManyBody().strength(5))
+    //     .force('x', d3.forceX().x(function(d) {
+    //         return xScale(d.distance);
+    //     }))
+    //     .force('y', d3.forceY().y(function(d) {
+    //         return yScale(d.elevationGain);
+    //     }))
+    //     // .force('collision', d3.forceCollide().radius(function(d) {
+    //     //     return radiusCountScale(d.elevationGain*0.7);
+    //     // }))
+    //     .on('tick', ticked);
 
-//   function ticked() {
-//     var u = d3.select('svg g g')
-//       .selectAll('circle')
-//       .data(activities);
+  function ticked() {
+    var u = d3.select('svg g g')
+      .selectAll('circle')
+      .data(activities);
 
-//     //console.log(u[1])
+    console.log(u)
 
-//     u.enter()
-//       // .append('circle')
-//       // .attr('r', function(d) {
-//       //   return d.radius;
-//       // })
-//       // .style('fill', function(d) {
-//       //   return categoryColorScale[d.group];
-//       // })
-//       .merge(u)
-//       .attr('cx', function(d) {
-//         return d.x;
-//       })
-//       .attr('cy', function(d) {
-//         return d.y;
-//       })
-//     u.exit().remove();
-//   }
+    u.enter()
+      // .append('circle')
+      // .attr('r', function(d) {
+      //   return d.radius;
+      // })
+      // .style('fill', function(d) {
+      //   return categoryColorScale[d.group];
+      // })
+        .merge(u)
+            .attr('cx', function(d) {
+                return d.x;
+            })
+            .attr('cy', function(d) {
+                return d.y;
+            })
+        u.exit().remove();
+  }
 
 </script>
 
