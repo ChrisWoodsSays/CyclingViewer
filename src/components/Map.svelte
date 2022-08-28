@@ -33,9 +33,12 @@
         .domain(extent(activities, (d)  =>  d.elevationGain))
         .range([innerHeight, 0]);
 
-    const radiusCountScale = scaleLog()
+    $: radiusCountScale = scaleLog()
 		.domain(extent(activities.map(d => d.elevationGain)))
+        .domain([100, 5000])
 		.range([5 , 25]);
+
+    $: console.log(radiusCountScale)
 
     $: scaleClusterColour = scaleOrdinal()
         .domain(clusters)
@@ -46,43 +49,52 @@
     $: height = width * 2/3
     $: console.log(activities)
 
-    // var simulation = d3.forceSimulation(activities)
-    //     //.force('charge', d3.forceManyBody().strength(5))
-    //     .force('x', d3.forceX().x(function(d) {
-    //         return xScale(d.distance);
-    //     }))
-    //     .force('y', d3.forceY().y(function(d) {
-    //         return yScale(d.elevationGain);
-    //     }))
-    //     // .force('collision', d3.forceCollide().radius(function(d) {
-    //     //     return radiusCountScale(d.elevationGain*0.7);
-    //     // }))
-    //     .on('tick', ticked);
+    let simulation
+    $: simulation = d3.forceSimulation(activities)
+        //.force('charge', d3.forceManyBody().strength(5))
+        .force('x', d3.forceX().x(function(d) {
+            return xScale(d.distance);
+        }))
+        .force('y', d3.forceY().y(function(d) {
+            return yScale(d.elevationGain);
+        }))
+        .force('collision', d3.forceCollide().radius(function(d) {
+            return radiusCountScale(d.elevationGain*0.7);
+        }))
+        .on('tick', ticked);
 
-  function ticked() {
-    var u = d3.select('svg g g')
-      .selectAll('circle')
-      .data(activities);
+    // simulation.alpha(1).restart()
+    // activities.forEach(act => {
+    //     act.x = xScale(act.distance);
+    //     act.y = yScale(act.elevationGain);
+    // });
+    // $: console.log(activities)
 
-    console.log(u)
+    function ticked() {
+        var u = d3.select('svg g g')
+            .selectAll('circle')
+            .data(activities);
 
-    u.enter()
-      // .append('circle')
-      // .attr('r', function(d) {
-      //   return d.radius;
-      // })
-      // .style('fill', function(d) {
-      //   return categoryColorScale[d.group];
-      // })
+        //console.log(u)
+
+        u.enter()
+        // .append('circle')
+        // .attr('r', function(d) {
+        //   return d.radius;
+        // })
+        // .style('fill', function(d) {
+        //   return categoryColorScale[d.group];
+        // })
         .merge(u)
-            .attr('cx', function(d) {
-                return d.x;
-            })
-            .attr('cy', function(d) {
-                return d.y;
-            })
+        .attr('cx', function(d) {
+            //console.log(d)
+            return d.x;
+        })
+        .attr('cy', function(d) {
+            return d.y;
+        })
         u.exit().remove();
-  }
+    }
 
 </script>
 
@@ -119,7 +131,7 @@
                         }}
                         cx={xScale(data.distance)}
                         cy={yScale(data.elevationGain)}
-                        r="10"
+                        r={radiusCountScale(data.elevationGain)}
                         opacity=0.6
                         fill = {scaleClusterColour(data.cluster)}
                     />
