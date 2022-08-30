@@ -11,6 +11,7 @@
 
     export let activities = [];
     export let clusters = [];
+    export let destinations = [];
     export let foregroundColor = '#FFFFFF';
     export let backgroundColor = '#000000';
 
@@ -34,7 +35,7 @@
         .range([innerHeight, 0]);
 
     $: radiusCountScale = scaleLog()
-		.domain(extent(activities.map(d => d.elevationGain)))
+		//.domain(extent(activities.map(d => d.elevationGain)))
         .domain([100, 5000])
 		.range([5 , 25]);
 
@@ -42,6 +43,10 @@
 
     $: scaleClusterColour = scaleOrdinal()
         .domain(clusters)
+        .range(schemeCategory10);
+
+    $: scaleDestinationColour = scaleOrdinal()
+        .domain(destinations)
         .range(schemeCategory10);
 
     // $: console.log(height)
@@ -59,7 +64,7 @@
             return yScale(d.elevationGain);
         }))
         .force('collision', d3.forceCollide().radius(function(d) {
-            return radiusCountScale(d.elevationGain*0.7);
+            return radiusCountScale(d.elevationGain)*0.7;
         }))
         .on('tick', ticked);
 
@@ -131,9 +136,10 @@
                         }}
                         cx={xScale(data.distance)}
                         cy={yScale(data.elevationGain)}
-                        r={radiusCountScale(data.elevationGain)}
+   
+                        r={5}
                         opacity=0.6
-                        fill = {scaleClusterColour(data.cluster)}
+                        fill = {scaleDestinationColour(data.destination)}
                     />
                 {/each}
             </g>
@@ -141,6 +147,7 @@
         </g>
     </svg>
 </div>
+                     <!-- r={radiusCountScale(data.elevationGain)} -->
               <!-- fill={`${colorScale(data.class)}`} -->
 
 <style>

@@ -10,22 +10,24 @@
   import { csv, timeParse } from 'd3';
 	const parseDate = timeParse('%Y-%m-%d');
   
-  let locations = [];
+  // let locations = [];
 
-  csv('./data/locations.csv', (act) => {
-	  return {
-      location: act['location'],
-      latitude: +act['latitude'],
-      longitude: +act['longitude'],
-      perimeterRadius: act['perimeterRadius'],
-	  };
-	}).then((d) => {
-		locations = d;
-	});
+  // csv('./data/locations.csv', (act) => {
+	//   return {
+  //     location: act['location'],
+  //     latitude: +act['latitude'],
+  //     longitude: +act['longitude'],
+  //     perimeterRadius: act['perimeterRadius'],
+	//   };
+	// }).then((d) => {
+	// 	locations = d;
+	// });
   
   let activities = [];
   // csv('./data/activitiesStrava.csv', (act) => {
-  csv('./data/activitiesClustered.csv', (act) => {
+  //csv('./data/activitiesClustered.csv', (act) => {
+  csv('./data/activitiesClusteredDestinations.csv', (act) => {
+    
 	  return {
       id: act['id'],
       actvityDate: new Date(act['start_date']).toLocaleDateString(),
@@ -58,7 +60,8 @@
       end_lat: +act['end_latlng1'],
       end_lon: +act['end_latlng2'],
       timezone: +act['timezone'],
-      cluster: +act['cluster']
+      cluster: +act['cluster'],
+      destination: act['destination']
 	  };
 	}).then((d) => {
 		activities = d;//.splice(0,10);//d.filter((dd) => dd.year >= 1920);
@@ -69,6 +72,10 @@
   $: clusters = Array.from(new Set(activities.map(act => act.cluster)))
     .sort(function(a, b){return a - b}); // compare required as need numeric sort
 
+  let destinations = []
+  $: destinations = Array.from(new Set(activities.map(act => act.destination)))
+    .sort(function(a, b){return a - b}); // compare required as need numeric sort
+  $: console.log(destinations)
   let activityRoutes = [];
 	csv('./data/activityRoutes.csv', (act) => {
 	  return {
@@ -127,6 +134,7 @@
       
             <Map activities = {activities}
                   clusters = {clusters}
+                  destinations = {destinations}
                   foregroundColor = {foregroundColor}
                   backgroundColor = {backgroundColor}/>
       
